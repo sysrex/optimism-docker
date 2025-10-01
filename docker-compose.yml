@@ -73,10 +73,13 @@ services:
       - --authrpc.jwtsecret=/config/jwt.txt
       - --rollup.disabletxpoolgossip=true
       - --ipcdisable
+      - --metrics
+      - --metrics.port=7299
 
     environment:
       <<: *common-env
     ports:
+      - "7299:7299"
       - "8545:8545" # JSON-RPC
       - "8546:8546" # WS
       - "8551:8551" # Engine API (JWT)
@@ -115,10 +118,13 @@ services:
       - --da.rpc=${CELESTIA_BRIDGE}
       - --da.auth_token=${CELESTIA_AUTH_TOKEN}
       - --da.namespace=${CELESTIA_NAMESPACE}
+      - --metrics.enabled
+      - --metrics.port=7300
     environment:
       <<: *common-env
     ports:
       - "9545:9545" # op-node RPC
+      - "7300:7300"
     volumes:
       - ./config:/config:ro
       - shared:/shared
@@ -153,10 +159,13 @@ services:
       - --da.rpc=${CELESTIA_BRIDGE}
       - --da.auth_token=${CELESTIA_AUTH_TOKEN}
       - --da.namespace=${CELESTIA_NAMESPACE}
+      - --metrics.enabled
+      - --metrics.port=7301
     environment:
       <<: *common-env
     ports:
       - "8548:8548" # batcher admin RPC (optional)
+      - "7301:7301"
     healthcheck:
       test: [ "CMD", "wget", "-qO-", "http://localhost:8548/healthz" ]
       interval: 15s
@@ -178,10 +187,13 @@ services:
       - --proposal-interval=6h
       - --private-key=${GS_PROPOSER_PRIVATE_KEY}
       - --l1-eth-rpc=${L1_RPC_URL}
+      - --metrics.enabled
+      - --metrics.port=7302
     environment:
       <<: *common-env
     ports:
       - "8560:8560"
+      - "7302:7302"
     healthcheck:
       test: [ "CMD", "wget", "-qO-", "http://localhost:8560/healthz" ]
       interval: 15s
