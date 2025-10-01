@@ -157,6 +157,11 @@ services:
       <<: *common-env
     ports:
       - "8548:8548" # batcher admin RPC (optional)
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8548/healthz" ]
+      interval: 15s
+      timeout: 5s
+      retries: 20
     networks: [opnet]
 
   op-proposer:
@@ -177,4 +182,9 @@ services:
       <<: *common-env
     ports:
       - "8560:8560"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8560/healthz" ]
+      interval: 15s
+      timeout: 5s
+      retries: 20
     networks: [opnet]
